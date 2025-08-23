@@ -1,5 +1,11 @@
 package core.basesyntax;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import core.basesyntax.db.Storage;
 import core.basesyntax.model.FruitTransaction;
 import core.basesyntax.service.ReportGenerator;
@@ -7,14 +13,12 @@ import core.basesyntax.service.impl.DataConverterImpl;
 import core.basesyntax.service.impl.FileReaderImpl;
 import core.basesyntax.service.impl.FileWriterImpl;
 import core.basesyntax.service.impl.ReportGeneratorImpl;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
 
 public class MainTests {
     private final FileReaderImpl fileReader = new FileReaderImpl();
@@ -27,11 +31,11 @@ public class MainTests {
 
     @Test
     void read_ShouldReadFileSuccessufully() {
-       String fileName = "reportToRead.csv";
-       List<String> lines = fileReader.read(fileName);
-       assertNotNull(lines);
-       assertFalse(lines.isEmpty());
-       assertEquals("type,fruit,quantity", lines.get(0));
+        String fileName = "reportToRead.csv";
+        List<String> lines = fileReader.read(fileName);
+        assertNotNull(lines);
+        assertFalse(lines.isEmpty());
+        assertEquals("type,fruit,quantity", lines.get(0));
     }
 
     @Test
@@ -130,15 +134,16 @@ public class MainTests {
                 () -> converter.convertToTransaction(lines));
         assertTrue(ex.getMessage().contains("Fruit name cannot be null or empty"));
     }
+
     @Test
     void convertToTransaction_ShouldThrowException_WhenQuantityIsNegative() {
         DataConverterImpl converter = new DataConverterImpl();
         List<String> lines = List.of(
                 "type,fruit,quantity",
                 "b,apple,-5"
-        ) ;
+        );
         RuntimeException exception = assertThrows(RuntimeException.class,
-                ()->converter.convertToTransaction(lines));
+                () -> converter.convertToTransaction(lines));
         assertTrue(exception.getMessage().contains("Quantity cannot be negative"));
     }
 
