@@ -1,11 +1,5 @@
 package core.basesyntax;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import core.basesyntax.db.Storage;
 import core.basesyntax.model.FruitTransaction;
 import core.basesyntax.service.ReportGenerator;
@@ -19,6 +13,8 @@ import java.nio.file.Path;
 import java.util.List;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class MainTests {
     private final FileReaderImpl fileReader = new FileReaderImpl();
@@ -36,6 +32,11 @@ public class MainTests {
         assertNotNull(lines);
         assertFalse(lines.isEmpty());
         assertEquals("type,fruit,quantity", lines.get(0));
+    }
+
+    @Test
+    void main_ShouldRunWithoutExceptions() {
+        assertDoesNotThrow(() -> Main.main(new String[]{}));
     }
 
     @Test
@@ -181,6 +182,15 @@ public class MainTests {
 
         assertEquals(expected, actual);
     }
+
+    @Test
+    void storage_ShouldStoreFruits() {
+        Storage.fruits.clear();
+        Storage.fruits.put("apple", 10);
+        assertEquals(10, Storage.fruits.get("apple"));
+    }
+
+
 }
 
 
