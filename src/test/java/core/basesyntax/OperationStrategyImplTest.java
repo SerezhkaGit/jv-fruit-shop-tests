@@ -2,14 +2,15 @@ package core.basesyntax;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import core.basesyntax.model.FruitTransaction;
 import core.basesyntax.strategy.BalanceOperation;
 import core.basesyntax.strategy.OperationHandler;
 import core.basesyntax.strategy.OperationStrategy;
 import core.basesyntax.strategy.OperationStrategyImpl;
-import org.junit.jupiter.api.Test;
 import java.util.EnumMap;
 import java.util.Map;
+import org.junit.jupiter.api.Test;
 
 public class OperationStrategyImplTest {
     @Test
@@ -26,7 +27,8 @@ public class OperationStrategyImplTest {
 
     @Test
     void get_ShouldThrowException_WhenHandlerMissing() {
-        OperationStrategy strategy = new OperationStrategyImpl(new EnumMap<>(FruitTransaction.Operation.class));
+        OperationStrategy strategy = new OperationStrategyImpl(new EnumMap<>(
+                FruitTransaction.Operation.class));
 
         assertThrows(RuntimeException.class,
                 () -> strategy.get(FruitTransaction.Operation.SUPPLY));
