@@ -4,33 +4,34 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import core.basesyntax.model.FruitTransaction;
-import core.basesyntax.strategy.BalanceOperation;
 import core.basesyntax.strategy.OperationHandler;
-import core.basesyntax.strategy.OperationStrategy;
 import core.basesyntax.strategy.OperationStrategyImpl;
-import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.Map;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class OperationStrategyImplTest {
-    @Test
-    void get_ShouldReturnCorrectHandler() {
-        Map<FruitTransaction.Operation, OperationHandler> handlerMap =
-                new EnumMap<>(FruitTransaction.Operation.class);
-        handlerMap.put(FruitTransaction.Operation.BALANCE, new BalanceOperation());
+    private OperationStrategyImpl operationStrategy;
+    private OperationHandler testHandler;
 
-        OperationStrategy strategy = new OperationStrategyImpl(handlerMap);
-
-        assertEquals(BalanceOperation.class,
-                strategy.get(FruitTransaction.Operation.BALANCE).getClass());
+    @BeforeEach
+    void setUp() {
+        testHandler = transaction -> {};
+        Map<FruitTransaction.Operation, OperationHandler> handlers = new HashMap<>();
+        handlers.put(FruitTransaction.Operation.BALANCE, testHandler);
+        operationStrategy = new OperationStrategyImpl(handlers);
     }
 
     @Test
-    void get_ShouldThrowException_WhenHandlerMissing() {
-        OperationStrategy strategy = new OperationStrategyImpl(new EnumMap<>(
-                FruitTransaction.Operation.class));
+    void get_ShouldReturnHandler_WhenOperationExists() {
+        OperationHandler result = operationStrategy.get(FruitTransaction.Operation.BALANCE);
+        assertEquals(testHandler, result);
+    }
 
+    @Test
+    void get_ShouldThrowException_WhenOperationNotFound() {
         assertThrows(RuntimeException.class,
-                () -> strategy.get(FruitTransaction.Operation.SUPPLY));
+                () -> operationStrategy.get(FruitTransaction.Operation.PURCHASE));
     }
 }
