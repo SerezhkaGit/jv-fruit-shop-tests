@@ -37,4 +37,13 @@ public class FileReaderImplTest {
     void read_ShouldThrowException_WhenFileDoesNotExist() {
         assertThrows(RuntimeException.class, () -> fileReader.read("not_exist.csv"));
     }
+
+    @Test
+    void read_ShouldReturnEmptyList_WhenFileIsEmpty() throws IOException {
+        Path tempFile = Files.createTempFile("emptyFile", ".csv");
+        assertThrows(RuntimeException.class,
+                () -> fileReader.read(tempFile.toString()),
+                "Expected RuntimeException when file is empty");
+    }
 }
+

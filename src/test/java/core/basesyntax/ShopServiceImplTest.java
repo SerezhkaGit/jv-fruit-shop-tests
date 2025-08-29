@@ -11,6 +11,7 @@ import core.basesyntax.strategy.OperationStrategy;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -19,7 +20,6 @@ public class ShopServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        Storage.fruits.clear();
         Map<FruitTransaction.Operation, OperationHandler> handlers = new HashMap<>();
         handlers.put(FruitTransaction.Operation.BALANCE,
                 transaction -> Storage.fruits.put(transaction.getFruit(),
@@ -27,6 +27,11 @@ public class ShopServiceImplTest {
         OperationStrategy operationStrategy = new core.basesyntax.strategy
                 .OperationStrategyImpl(handlers);
         shopService = new ShopServiceImpl(operationStrategy);
+    }
+
+    @AfterEach
+    void clear() {
+        Storage.fruits.clear();
     }
 
     @Test
